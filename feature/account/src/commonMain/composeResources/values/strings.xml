@@ -1,0 +1,21 @@
+<resources>
+    <string name="account">Akun</string>
+    <string name="account_detail">Detail akun</string>
+    <string name="name">Nama</string>
+    <string name="type">Tipe</string>
+    <string name="balance">Saldo</string>
+    <string name="status">Status</string>
+    <string name="active">Aktif</string>
+    <string name="inactive">Tidak aktif</string>
+    <string name="deactivate_account_confirmation">Menonaktifkan akun akan mengunci akses dan transaksi terkait. Yakin lanjut?</string>
+    <string name="activate_account_confirmation">Mengaktifkan akun akan memulihkan akses dan transaksi terkait. Yakin lanjut?</string>
+    <string name="add_new_account">Tambah akun baru</string>
+    <string name="choose_account_type">Pilih tipe akun</string>
+    <string name="enter_account_name">Masukkan nama akun</string>
+    <string name="start_balance">Nominal awal</string>
+    <string name="add">Tambah</string>
+    <string name="your_list_account">Daftar akun kamu</string>
+    <string name="total_account_balance">Total saldo semua akun</string>
+    <string name="save">Simpan</string>
+    <string name="edit_account">Ubah data akun</string>
+</resources>

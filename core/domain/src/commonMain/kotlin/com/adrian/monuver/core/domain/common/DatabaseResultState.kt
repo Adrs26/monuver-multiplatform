@@ -1,0 +1,76 @@
+package com.adrian.monuver.core.domain.common
+
+sealed class DatabaseResultState {
+    data object Initial : DatabaseResultState()
+
+    data object EmptyAccountName : DatabaseResultState()
+    data object EmptyAccountType : DatabaseResultState()
+    data object EmptyAccountBalance : DatabaseResultState()
+    data object InsufficientAccountBalance : DatabaseResultState()
+    data object CreateAccountSuccess : DatabaseResultState()
+    data object UpdateAccountSuccess : DatabaseResultState()
+    data object DeactivateAccountSuccess : DatabaseResultState()
+    data object ActivateAccountSuccess : DatabaseResultState()
+
+    data object EmptyTransactionTitle : DatabaseResultState()
+    data object EmptyTransactionDate : DatabaseResultState()
+    data object EmptyTransactionCategory : DatabaseResultState()
+    data object EmptyTransactionAmount : DatabaseResultState()
+    data object EmptyTransactionSource : DatabaseResultState()
+    data object EmptyTransactionDestination : DatabaseResultState()
+    data object CreateTransactionSuccess : DatabaseResultState()
+    data class CreateSuccessWithWarningCondition(
+        val category: Int,
+        val warningCondition: Int
+    ) : DatabaseResultState()
+    data object UpdateTransactionSuccess : DatabaseResultState()
+    data object TransactionDateAfterToday : DatabaseResultState()
+
+    data object EmptyBudgetCategory : DatabaseResultState()
+    data object EmptyBudgetMaxAmount : DatabaseResultState()
+    data object CreateBudgetSuccess : DatabaseResultState()
+    data object UpdateBudgetSuccess : DatabaseResultState()
+    data object ActiveBudgetWithCategoryAlreadyExists : DatabaseResultState()
+    data object CurrentBudgetAmountExceedsMaximumLimit : DatabaseResultState()
+    data object BudgetStartDateAfterToday : DatabaseResultState()
+    data object BudgetEndDateBeforeToday : DatabaseResultState()
+
+    data object EmptyBillTitle : DatabaseResultState()
+    data object EmptyBillDate : DatabaseResultState()
+    data object EmptyBillAmount : DatabaseResultState()
+    data object EmptyBillFixPeriod : DatabaseResultState()
+    data object InvalidBillFixPeriod : DatabaseResultState()
+    data object CreateBillSuccess : DatabaseResultState()
+    data object PayBillSuccess : DatabaseResultState()
+    data object CancelBillSuccess : DatabaseResultState()
+    data object UpdateBillSuccess : DatabaseResultState()
+
+    data object EmptySavingTitle : DatabaseResultState()
+    data object EmptySavingTargetAmount : DatabaseResultState()
+    data object EmptySavingTargetDate : DatabaseResultState()
+    data object InsufficientSavingBalance : DatabaseResultState()
+    data object CreateSavingSuccess : DatabaseResultState()
+    data object UpdateSavingSuccess : DatabaseResultState()
+    data object EmptySavingAmount : DatabaseResultState()
+    data object CompleteSavingSuccess : DatabaseResultState()
+    data object EmptyDepositDate : DatabaseResultState()
+    data object EmptyDepositAmount : DatabaseResultState()
+    data object EmptyDepositAccount : DatabaseResultState()
+    data object CreateDepositTransactionSuccess : DatabaseResultState()
+    data object EmptyWithdrawDate : DatabaseResultState()
+    data object EmptyWithdrawAmount : DatabaseResultState()
+    data object EmptyWithdrawAccount : DatabaseResultState()
+    data object CreateWithdrawTransactionSuccess : DatabaseResultState()
+    data object SavingTargetDateBeforeToday : DatabaseResultState()
+
+    data object BackupDataSuccess : DatabaseResultState()
+    data object BackupDataFailed : DatabaseResultState()
+    data object RestoreDataSuccess : DatabaseResultState()
+    data object RestoreDataFailed : DatabaseResultState()
+
+    data object EmptyReportTitle : DatabaseResultState()
+    data object EmptyReportUsername : DatabaseResultState()
+    data object EmptyReportStartDate : DatabaseResultState()
+    data object EmptyReportEndDate : DatabaseResultState()
+    data object ExportDataFailed : DatabaseResultState()
+}

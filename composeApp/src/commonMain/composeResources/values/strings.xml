@@ -1,0 +1,13 @@
+<resources>
+    <string name="home_menu">Beranda</string>
+    <string name="transaction_menu">Transaksi</string>
+    <string name="budgeting_menu">Budget</string>
+    <string name="analytics_menu">Analitik</string>
+    <string name="yes_i_am_understand">Ya, saya mengerti</string>
+    <string name="low_remaining_budget_warning">Budget kamu untuk kategori %1$s hampir habis. Yuk, lebih hemat dalam penggunaannya</string>
+    <string name="full_budget_warning">Budget kamu untuk kategori %1$s sudah habis. Hindari pengeluaran lebih lanjut agar tidak melebihi batas</string>
+    <string name="over_budget_warning">Pengeluaran kamu sudah melebihi budget pada kategori %1$s. Coba evaluasi dan atur kembali keuanganmu, ya</string>
+    <string name="add_income">Tambah pemasukan</string>
+    <string name="add_expense">Tambah pengeluaran</string>
+    <string name="transfer_account">Transfer antar akun</string>
+</resources>

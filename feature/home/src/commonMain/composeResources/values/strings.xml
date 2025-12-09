@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Monuver</string>
+    <string name="total_active_balance">Total saldo aktif</string>
+    <string name="budgeting_recap">Rekap budget periode ini</string>
+    <string name="see_budgeting">Lihat budget</string>
+    <string name="used_amount">Saldo digunakan</string>
+    <string name="remained_amount">Saldo tersisa</string>
+    <string name="maximum_amount">Saldo maksimal</string>
+    <string name="percentage_value">%1$d%</string>
+    <string name="income">Pemasukan</string>
+    <string name="expense">Pengeluaran</string>
+    <string name="transfer">Transfer</string>
+    <string name="budgeting_menu">Budget</string>
+    <string name="recent_transactions">Transaksi terakhir</string>
+    <string name="see_all">Lihat semua</string>
+    <string name="no_transactions_yet">Belum ada transaksi nih</string>
+</resources>

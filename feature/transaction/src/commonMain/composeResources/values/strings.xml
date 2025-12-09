@@ -1,0 +1,34 @@
+<resources>
+    <string name="add_income">Tambah pemasukan</string>
+    <string name="add_expense">Tambah pengeluaran</string>
+    <string name="title">Judul</string>
+    <string name="enter_transaction_title">Masukkan judul transaksi</string>
+    <string name="category">Kategori</string>
+    <string name="choose_transaction_category">Pilih kategori transaksi</string>
+    <string name="date">Tanggal</string>
+    <string name="choose_transaction_date">Pilih tanggal transaksi</string>
+    <string name="amount">Nominal</string>
+    <string name="source_account">Akun sumber</string>
+    <string name="destination_account">Akun tujuan</string>
+    <string name="choose_source_account">Pilih akun sumber</string>
+    <string name="choose_destination_account">Pilih akun tujuan</string>
+    <string name="add">Tambah</string>
+    <string name="cannot_select_future_date">Transaksi tidak bisa dicatat untuk tanggal di masa depan</string>
+    <string name="transaction_type">Jenis transaksi</string>
+    <string name="transaction_year">Tahun transaksi</string>
+    <string name="transaction_month">Bulan transaksi</string>
+    <string name="cancel">Batal</string>
+    <string name="apply">Terapkan</string>
+    <string name="all">Semua</string>
+    <string name="search_transaction">Cari judul transaksi</string>
+    <string name="edit_transaction">Ubah data transaksi</string>
+    <string name="save">Simpan</string>
+    <string name="transaction_detail">Detail transaksi</string>
+    <string name="type">Tipe</string>
+    <string name="sub_category">Sub-kategori</string>
+    <string name="delete_this_transaction">Transaksi yang telah dihapus tidak dapat dipulihkan. Yakin lanjut?</string>
+    <string name="transaction_successfully_deleted">Transaksi berhasil dihapus</string>
+    <string name="choose_transfer_date">Pilih tanggal transfer</string>
+    <string name="transfer">Transfer</string>
+    <string name="transfer_account">Transfer antar akun</string>
+</resources>
