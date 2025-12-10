@@ -88,6 +88,7 @@ private fun TransactionContent(
     if (showFilterDialog) {
         TransactionFilterDialog(
             filterState = state.filter,
+            availableYears = state.availableYears,
             onDismissRequest = { showFilterDialog = false },
             onFilterApply = { filter ->
                 onAction(TransactionAction.FilterApply(filter))

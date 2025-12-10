@@ -46,6 +46,7 @@ import kotlin.math.ceil
 @Composable
 internal fun TransactionFilterDialog(
     filterState: FilterState,
+    availableYears: List<Int>,
     onDismissRequest: () -> Unit,
     onFilterApply: (FilterState) -> Unit,
     modifier: Modifier = Modifier
@@ -61,6 +62,7 @@ internal fun TransactionFilterDialog(
         ) {
             TransactionFilterMenu(
                 filterState = filterState,
+                availableYears = availableYears,
                 onDismissRequest = onDismissRequest,
                 onFilterApply = onFilterApply
             )
@@ -71,12 +73,13 @@ internal fun TransactionFilterDialog(
 @Composable
 private fun TransactionFilterMenu(
     filterState: FilterState,
+    availableYears: List<Int>,
     onDismissRequest: () -> Unit,
     onFilterApply: (FilterState) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val typeFilterOptions = DataProvider.provideTransactionTypeFilterOptions()
-    val yearFilterOptions = listOf(0) + filterState.yearOptions
+    val yearFilterOptions = listOf(0) + availableYears
     val monthFilterOptions = DataProvider.provideMonthFilterOptions()
 
     var tempTypeFilter by remember { mutableStateOf(filterState.type) }
@@ -222,7 +225,6 @@ private fun RadioGrid(
 }
 
 internal data class FilterState(
-    val yearOptions: List<Int> = emptyList(),
     val type: Int? = null,
     val year: Int? = null,
     val month: Int? = null
