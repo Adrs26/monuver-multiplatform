@@ -9,6 +9,7 @@ import com.adrian.monuver.feature.billing.di.platformSchedulerModule
 import com.adrian.monuver.feature.budgeting.di.budgetingModule
 import com.adrian.monuver.feature.home.di.homeModule
 import com.adrian.monuver.feature.saving.di.savingModule
+import com.adrian.monuver.feature.settings.di.settingsModule
 import com.adrian.monuver.feature.transaction.di.transactionModule
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
@@ -25,6 +26,7 @@ fun initKoin(config: KoinAppDeclaration? = null) : KoinApplication {
             coreModule,
             homeModule,
             savingModule,
+            settingsModule,
             transactionModule,
             platformDatabaseModule(),
             platformSchedulerModule()

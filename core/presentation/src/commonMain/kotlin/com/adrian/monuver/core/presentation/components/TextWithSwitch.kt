@@ -51,10 +51,7 @@ fun TextWithSwitch(
                 checkedTrackColor = MaterialTheme.colorScheme.primary,
                 uncheckedThumbColor = MaterialTheme.colorScheme.secondary,
                 uncheckedTrackColor = MaterialTheme.colorScheme.surface,
-                uncheckedBorderColor = MaterialTheme.colorScheme.outline,
-                disabledUncheckedThumbColor = MaterialTheme.colorScheme.secondary,
-                disabledUncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
-                disabledUncheckedBorderColor = MaterialTheme.colorScheme.surfaceVariant
+                uncheckedBorderColor = MaterialTheme.colorScheme.outlineVariant
             )
         )
     }

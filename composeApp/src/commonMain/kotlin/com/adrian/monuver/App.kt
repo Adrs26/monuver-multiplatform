@@ -15,6 +15,7 @@ import com.adrian.monuver.feature.analytics.presentation.navigation.analyticsNav
 import com.adrian.monuver.feature.billing.presentation.navigation.billingNavGraph
 import com.adrian.monuver.feature.budgeting.presentation.navigation.budgetingNavGraph
 import com.adrian.monuver.feature.saving.presentation.navigation.savingNavGraph
+import com.adrian.monuver.feature.settings.presentation.navigation.settingsNavGraph
 import com.adrian.monuver.feature.transaction.presentation.navigation.transactionNavGraph
 import com.adrian.monuver.main.MainScreen
 
@@ -37,6 +38,7 @@ fun App() {
             accountNavGraph(rootNavController)
             billingNavGraph(rootNavController)
             savingNavGraph(rootNavController)
+            settingsNavGraph(rootNavController)
         }
     }
 }

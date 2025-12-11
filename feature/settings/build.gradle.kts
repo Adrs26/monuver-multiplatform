@@ -2,6 +2,9 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
     alias(libs.plugins.androidLint)
+    alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
@@ -13,6 +16,8 @@ kotlin {
         namespace = "com.adrian.monuver.feature.settings"
         compileSdk = 36
         minSdk = 24
+
+        androidResources.enable = true
 
         withHostTestBuilder {
         }
@@ -59,8 +64,18 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(libs.kotlin.stdlib)
-                // Add KMP dependencies here
+                implementation(projects.core.data)
+                implementation(projects.core.domain)
+                implementation(projects.core.presentation)
+
+                implementation(compose.components.resources)
+                implementation(libs.androidx.navigation.compose)
+                implementation(libs.filekit.core)
+                implementation(libs.filekit.dialogs)
+                implementation(libs.kotlinx.serialization.json)
+                implementation(libs.moko.permissions)
+                implementation(libs.moko.permissions.compose)
+                implementation(libs.moko.permissions.notifications)
             }
         }
 

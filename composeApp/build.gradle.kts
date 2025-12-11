@@ -40,10 +40,13 @@ kotlin {
             implementation(projects.feature.budgeting)
             implementation(projects.feature.home)
             implementation(projects.feature.saving)
+            implementation(projects.feature.settings)
             implementation(projects.feature.transaction)
 
             implementation(compose.components.resources)
             implementation(libs.androidx.navigation.compose)
+            implementation(libs.filekit.core)
+            implementation(libs.filekit.dialogs)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
