@@ -6,9 +6,9 @@ import com.adrian.monuver.feature.settings.domain.manager.BackupRestoreManager
 import com.adrian.monuver.feature.settings.domain.repository.SettingsRepository
 import com.adrian.monuver.feature.settings.domain.usecase.BackupDataUseCase
 import com.adrian.monuver.feature.settings.domain.usecase.DeleteAllDataUseCase
-import com.adrian.monuver.feature.settings.domain.usecase.ExportDataToPdfUseCase
 import com.adrian.monuver.feature.settings.domain.usecase.RestoreDataUseCase
 import com.adrian.monuver.feature.settings.presentation.SettingsViewModel
+import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
@@ -21,8 +21,9 @@ val settingsModule = module {
 
     factoryOf(::BackupDataUseCase)
     factoryOf(::DeleteAllDataUseCase)
-    factoryOf(::ExportDataToPdfUseCase)
     factoryOf(::RestoreDataUseCase)
 
     viewModelOf(::SettingsViewModel)
 }
+
+expect fun platformExportModule(): Module

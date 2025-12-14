@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import io.github.alexzhirkevich.compottie.Compottie
 import io.github.alexzhirkevich.compottie.LottieCompositionSpec
 import io.github.alexzhirkevich.compottie.animateLottieCompositionAsState
 import io.github.alexzhirkevich.compottie.rememberLottieComposition
@@ -49,14 +50,14 @@ internal fun RemoveProgressDialog(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 RemoveProgressAnimation(
-                    modifier = Modifier.size(200.dp)
+                    modifier = Modifier.size(250.dp)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = stringResource(Res.string.data_delete_in_progress),
                     modifier = Modifier.padding(24.dp),
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.labelMedium
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
         }
@@ -72,7 +73,7 @@ private fun RemoveProgressAnimation(
     }
     val progress by animateLottieCompositionAsState(
         composition = composition,
-        iterations = 1
+        iterations = Compottie.IterateForever
     )
 
     Box(
@@ -84,7 +85,8 @@ private fun RemoveProgressAnimation(
                 composition = composition,
                 progress = { progress }
             ),
-            contentDescription = "Lottie Animation"
+            contentDescription = "Lottie Animation",
+            modifier = Modifier.fillMaxWidth(0.9f)
         )
     }
 }

@@ -10,57 +10,51 @@ import com.adrian.monuver.feature.settings.domain.repository.SettingsRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.ExperimentalTime
 
 internal class ExportDataToPdfUseCase(
     private val manager: ExportManager,
     private val repository: SettingsRepository
 ) {
-    operator fun invoke(export: Export): Flow<ExportState> {
-        if (export.title.isEmpty()) return flowOf(
-            ExportState.Error(DatabaseResultState.EmptyReportTitle)
-        )
-        if (export.username.isEmpty()) return flowOf(
-            ExportState.Error(DatabaseResultState.EmptyReportUsername)
-        )
-        if (export.startDate.isEmpty()) return flowOf(
-            ExportState.Error(DatabaseResultState.EmptyReportStartDate)
-        )
-        if (export.endDate.isEmpty()) return flowOf(
-            ExportState.Error(DatabaseResultState.EmptyReportEndDate)
-        )
-
+    @OptIn(ExperimentalTime::class)
+    operator fun invoke(
+        stringUri: String,
+        export: Export
+    ): Flow<ExportState> {
         return flow {
             emit(ExportState.Progress)
 
             delay(3.seconds)
 
             val transactions = when (export.sortType) {
-                1 if export.isTransactionGrouped -> {
-                    repository.getTransactionsInRangeByDateAscWithType(
-                        startDate = export.startDate,
-                        endDate = export.endDate
-                    )
+                1 -> {
+                    if (export.isTransactionGrouped) {
+                        repository.getTransactionsInRangeByDateAscWithType(
+                            startDate = export.startDate,
+                            endDate = export.endDate
+                        )
+                    } else {
+                        repository.getTransactionsInRangeByDateAsc(
+                            startDate = export.startDate,
+                            endDate = export.endDate
+                        )
+                    }
                 }
-                1 if !export.isTransactionGrouped -> {
-                    repository.getTransactionsInRangeByDateAsc(
-                        startDate = export.startDate,
-                        endDate = export.endDate
-                    )
+                2 -> {
+                    if (export.isTransactionGrouped) {
+                        repository.getTransactionsInRangeByDateDescWithType(
+                            startDate = export.startDate,
+                            endDate = export.endDate
+                        )
+                    } else {
+                        repository.getTransactionsInRangeByDateDesc(
+                            startDate = export.startDate,
+                            endDate = export.endDate
+                        )
+                    }
                 }
-                2 if export.isTransferIncluded -> {
-                    repository.getTransactionsInRangeByDateDescWithType(
-                        startDate = export.startDate,
-                        endDate = export.endDate
-                    )
-                }
-                else -> {
-                    repository.getTransactionsInRangeByDateDesc(
-                        startDate = export.startDate,
-                        endDate = export.endDate
-                    )
-                }
+                else -> emptyList()
             }
 
             val commonTransactions = transactions.filter {
@@ -84,6 +78,7 @@ internal class ExportDataToPdfUseCase(
 
             try {
                 manager.exportToPdf(
+                    stringUri = stringUri,
                     report = Report(
                         reportName = export.title,
                         username = export.username,

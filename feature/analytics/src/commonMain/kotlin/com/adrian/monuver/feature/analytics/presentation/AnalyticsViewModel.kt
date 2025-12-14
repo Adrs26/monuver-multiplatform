@@ -2,6 +2,7 @@ package com.adrian.monuver.feature.analytics.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.adrian.monuver.core.data.datastore.MonuverPreferences
 import com.adrian.monuver.core.domain.common.CustomDispatcher
 import com.adrian.monuver.core.domain.usecase.GetDistinctTransactionYearsUseCase
 import com.adrian.monuver.core.domain.util.DateHelper
@@ -19,10 +20,10 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 
 internal class AnalyticsViewModel(
+    private val preferences: MonuverPreferences,
     private val getTransactionBalanceSummaryUseCase: GetTransactionBalanceSummaryUseCase,
     private val getTransactionCategorySummaryUseCase: GetTransactionCategorySummaryUseCase,
     private val getTransactionSummaryUseCase: GetTransactionSummaryUseCase,
-//    private val preferences: UserPreferences,
     private val getDistinctTransactionYearsUseCase: GetDistinctTransactionYearsUseCase,
     private val customDispatcher: CustomDispatcher
 ) : ViewModel() {
@@ -31,10 +32,19 @@ internal class AnalyticsViewModel(
     val state = _state.asStateFlow()
 
     init {
+        observeThemeState()
         observeAvailableYears()
         observeBalanceSummary()
         observeDailySummaries()
         observeCategorySummaries()
+    }
+
+    private fun observeThemeState() {
+        preferences.themeState.onEach { themeState ->
+            _state.update {
+                it.copy(themeState = themeState)
+            }
+        }.launchIn(viewModelScope)
     }
 
     private fun observeAvailableYears() {

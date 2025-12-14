@@ -20,7 +20,6 @@ import kotlin.time.Duration.Companion.seconds
 
 internal class SettingsViewModel(
     private val preferences: MonuverPreferences,
-//    private val exportDataToPdfUseCase: ExportDataToPdfUseCase,
     private val backupDataUseCase: BackupDataUseCase,
     private val restoreDataUseCase: RestoreDataUseCase,
     private val deleteAllDataUseCase: DeleteAllDataUseCase

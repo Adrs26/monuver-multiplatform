@@ -45,7 +45,7 @@ class MonuverPreferences(
 
     val isReminderForDueBillEnabled: Flow<Boolean> = dataStore.data
         .map { preferences ->
-            preferences[REMINDER_FOR_DUE_BILL_KEY] ?: true
+            preferences[REMINDER_FOR_DUE_BILL_KEY] ?: false
         }
 
     val themeState: Flow<ThemeState> = dataStore.data

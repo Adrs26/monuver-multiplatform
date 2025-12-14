@@ -6,7 +6,6 @@ import com.adrian.monuver.core.data.repository.CoreRepositoryImpl
 import com.adrian.monuver.core.domain.common.CustomDispatcher
 import com.adrian.monuver.core.domain.common.CustomDispatcherImpl
 import com.adrian.monuver.core.domain.repository.CoreRepository
-import com.adrian.monuver.core.domain.usecase.CheckAppVersionUseCase
 import com.adrian.monuver.core.domain.usecase.GetActiveAccountsUseCase
 import com.adrian.monuver.core.domain.usecase.GetBudgetSummaryUseCase
 import com.adrian.monuver.core.domain.usecase.GetDistinctTransactionYearsUseCase
@@ -27,7 +26,6 @@ val coreModule = module {
     singleOf(::CoreRepositoryImpl).bind(CoreRepository::class)
     singleOf(::CustomDispatcherImpl).bind(CustomDispatcher::class)
 
-    factoryOf(::CheckAppVersionUseCase)
     factoryOf(::GetActiveAccountsUseCase)
     factoryOf(::GetBudgetSummaryUseCase)
     factoryOf(::GetDistinctTransactionYearsUseCase)

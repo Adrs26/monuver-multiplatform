@@ -73,4 +73,5 @@ sealed class DatabaseResultState {
     data object EmptyReportStartDate : DatabaseResultState()
     data object EmptyReportEndDate : DatabaseResultState()
     data object ExportDataFailed : DatabaseResultState()
+    data object ReportStartDateAfterEndDate : DatabaseResultState()
 }

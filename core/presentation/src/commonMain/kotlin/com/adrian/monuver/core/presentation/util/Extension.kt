@@ -51,6 +51,7 @@ import monuver.core.presentation.generated.resources.empty_transaction_date
 import monuver.core.presentation.generated.resources.empty_transaction_destination
 import monuver.core.presentation.generated.resources.empty_transaction_source
 import monuver.core.presentation.generated.resources.empty_transaction_title
+import monuver.core.presentation.generated.resources.report_start_date_cannot_be_after_end_date
 import monuver.core.presentation.generated.resources.insufficient_account_balance
 import monuver.core.presentation.generated.resources.insufficient_saving_balance
 import monuver.core.presentation.generated.resources.invalid_bill_fix_period
@@ -162,5 +163,6 @@ fun DatabaseResultState.toStringRes() = when (this) {
     is DatabaseResultState.EmptyTransactionTitle -> Res.string.empty_transaction_title
     is DatabaseResultState.TransactionDateAfterToday -> Res.string.transaction_date_cannot_be_after_today
     is DatabaseResultState.SavingTargetDateBeforeToday -> Res.string.saving_target_date_cannot_be_before_today
+    is DatabaseResultState.ReportStartDateAfterEndDate -> Res.string.report_start_date_cannot_be_after_end_date
     else -> Res.string.all
 }
