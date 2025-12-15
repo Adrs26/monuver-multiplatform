@@ -32,9 +32,9 @@ import com.adrian.monuver.core.domain.util.toFormattedAmount
 import com.adrian.monuver.core.presentation.components.ClickTextField
 import com.adrian.monuver.core.presentation.components.CommonAppBar
 import com.adrian.monuver.core.presentation.components.CommonDatePicker
-import com.adrian.monuver.core.presentation.components.CommonTextField
 import com.adrian.monuver.core.presentation.components.DisableTextField
 import com.adrian.monuver.core.presentation.components.PrimaryActionButton
+import com.adrian.monuver.core.presentation.components.ReactiveTextField
 import com.adrian.monuver.core.presentation.navigation.Billing
 import com.adrian.monuver.core.presentation.util.DatabaseCodeMapper
 import com.adrian.monuver.core.presentation.util.sharedKoinViewModel
@@ -83,6 +83,9 @@ fun BillPaymentScreen(
                     is BillPaymentAction.NavigateToSource -> {
                         navController.navigate(Billing.PaymentAccount)
                     }
+                    is BillPaymentAction.TitleChange -> {
+                        viewModel.setTransactionTitle(action.title)
+                    }
                     is BillPaymentAction.PayCurrentBill -> {
                         viewModel.processBillPayment(bill, action.bill)
                     }
@@ -98,7 +101,6 @@ private fun BillPaymentContent(
     state: BillPaymentState,
     onAction: (BillPaymentAction) -> Unit
 ) {
-    val title = rememberTextFieldState(initialText = "Pembayaran Tagihan")
     val date = rememberTextFieldState(
         initialText = Clock.System.now()
             .toLocalDateTime(TimeZone.currentSystemDefault()).date.toString()
@@ -128,7 +130,7 @@ private fun BillPaymentContent(
                     onAction(
                         BillPaymentAction.PayCurrentBill(
                             BillPayment(
-                                title = title.text.toString(),
+                                title = state.title,
                                 parentCategory = state.parentCategory,
                                 childCategory = state.childCategory,
                                 date = date.text.toString(),
@@ -149,8 +151,11 @@ private fun BillPaymentContent(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            CommonTextField(
-                state = title,
+            ReactiveTextField(
+                value = state.title,
+                onValueChange = { title ->
+                    onAction(BillPaymentAction.TitleChange(title))
+                },
                 label = stringResource(Res.string.title),
                 placeholder = stringResource(Res.string.enter_transaction_title),
                 errorMessage = stringResource(state.result.toStringRes()),

@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.adrian.monuver.core.data.database.entity.projection.TransactionCategoryRecommendationEntity
 import com.adrian.monuver.core.data.database.entity.projection.TransactionCategorySummaryEntity
 import com.adrian.monuver.core.data.database.entity.projection.TransactionSummaryEntity
 import com.adrian.monuver.core.data.database.entity.room.TransactionEntity
@@ -123,6 +124,16 @@ interface TransactionDao {
         WHERE date BETWEEN :startDate AND :endDate
     """)
     fun getTransactionsInRange(startDate: String, endDate: String): Flow<List<TransactionSummaryEntity>>
+
+    @Query("""
+        SELECT parent_category, child_category FROM `transaction`
+        WHERE (title LIKE '%' || :title || '%') AND type = :type
+        ORDER BY timestamp DESC LIMIT 1
+    """)
+    fun getCategoryRecommendationByTitle(
+        title: String,
+        type: Int
+    ): Flow<TransactionCategoryRecommendationEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun createNewTransaction(transaction: TransactionEntity): Long

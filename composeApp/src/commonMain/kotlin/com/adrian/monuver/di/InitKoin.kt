@@ -1,7 +1,7 @@
 package com.adrian.monuver.di
 
+import com.adrian.monuver.AppViewModel
 import com.adrian.monuver.core.data.di.coreModule
-import com.adrian.monuver.core.data.di.platformCheckVersionModule
 import com.adrian.monuver.core.data.di.platformDatabaseModule
 import com.adrian.monuver.feature.account.di.accountModule
 import com.adrian.monuver.feature.analytics.di.analyticsModule
@@ -15,7 +15,9 @@ import com.adrian.monuver.feature.settings.di.settingsModule
 import com.adrian.monuver.feature.transaction.di.transactionModule
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.KoinAppDeclaration
+import org.koin.dsl.module
 
 fun initKoin(config: KoinAppDeclaration? = null) : KoinApplication {
     return startKoin {
@@ -30,11 +32,10 @@ fun initKoin(config: KoinAppDeclaration? = null) : KoinApplication {
             savingModule,
             settingsModule,
             transactionModule,
-            platformCheckVersionModule(),
             platformDatabaseModule(),
             platformExportModule(),
             platformSchedulerModule(),
-            platformStartingModule()
+            module { viewModelOf(::AppViewModel) }
         )
     }
 }

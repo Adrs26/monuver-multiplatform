@@ -7,5 +7,6 @@ internal sealed interface AddTransactionAction {
     data class  NavigateToCategory(val transactionType: Int) : AddTransactionAction
     data object NavigateToSource : AddTransactionAction
     data class  ShowWarningAlert(val warning: Int, val category: Int) : AddTransactionAction
+    data class  TitleChange(val title: String) : AddTransactionAction
     data class  AddNewTransaction(val transaction: AddTransaction) : AddTransactionAction
 }

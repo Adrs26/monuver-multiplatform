@@ -15,6 +15,8 @@ class MonuverPreferences(
 ) {
     companion object {
         private val FIRST_TIME_KEY = booleanPreferencesKey("first_time")
+        private val ACCOUNT_DEFAULT_ID_KEY = intPreferencesKey("account_default")
+        private val ACCOUNT_DEFAULT_NAME_KEY = stringPreferencesKey("account_name")
         private val NOTIFICATION_KEY = booleanPreferencesKey("notification")
         private val REMINDER_DAYS_BEFORE_DUE_KEY = intPreferencesKey("reminder_days_before_due")
         private val REMINDER_AFTER_DUE_DAY_KEY = booleanPreferencesKey("reminder_after_due_day")
@@ -26,6 +28,16 @@ class MonuverPreferences(
     val isFirstTime: Flow<Boolean> = dataStore.data
         .map { preferences ->
             preferences[FIRST_TIME_KEY] ?: true
+        }
+
+    val accountDefaultId: Flow<Int> = dataStore.data
+        .map { preferences ->
+            preferences[ACCOUNT_DEFAULT_ID_KEY] ?: 0
+        }
+
+    val accountDefaultName: Flow<String> = dataStore.data
+        .map { preferences ->
+            preferences[ACCOUNT_DEFAULT_NAME_KEY] ?: ""
         }
 
     val isNotificationEnabled: Flow<Boolean> = dataStore.data
@@ -65,6 +77,13 @@ class MonuverPreferences(
     suspend fun setFirstTimeToFalse() {
         dataStore.edit { preferences ->
             preferences[FIRST_TIME_KEY] = false
+        }
+    }
+
+    suspend fun setAccountDefault(id: Int, name: String) {
+        dataStore.edit { preferences ->
+            preferences[ACCOUNT_DEFAULT_ID_KEY] = id
+            preferences[ACCOUNT_DEFAULT_NAME_KEY] = name
         }
     }
 

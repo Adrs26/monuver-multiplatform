@@ -94,7 +94,7 @@ internal fun SettingsThemeDialog(
                         Text(
                             text = stringResource(Res.string.cancel),
                             style = MaterialTheme.typography.bodyMedium.copy(
-                                color = MaterialTheme.colorScheme.primary,
+                                color = MaterialTheme.colorScheme.onSurface,
                                 fontSize = 12.sp
                             )
                         )

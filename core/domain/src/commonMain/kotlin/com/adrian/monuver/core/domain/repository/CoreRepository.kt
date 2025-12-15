@@ -3,6 +3,7 @@ package com.adrian.monuver.core.domain.repository
 import com.adrian.monuver.core.domain.model.Account
 import com.adrian.monuver.core.domain.model.Bill
 import com.adrian.monuver.core.domain.model.Budget
+import com.adrian.monuver.core.domain.model.TransactionCategoryRecommendation
 import kotlinx.coroutines.flow.Flow
 
 interface CoreRepository {
@@ -18,6 +19,11 @@ interface CoreRepository {
     fun getTotalBudgetUsedAmount(): Flow<Long>
 
     fun getAllActiveBudgets(): Flow<List<Budget>>
+
+    fun getCategoryRecommendationByTitle(
+        title: String,
+        type: Int
+    ): Flow<TransactionCategoryRecommendation>
 
     suspend fun updateBudgetStatusToInactive(category: Int)
 

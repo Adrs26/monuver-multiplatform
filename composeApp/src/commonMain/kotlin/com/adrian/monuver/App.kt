@@ -15,7 +15,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.adrian.monuver.core.domain.common.CheckAppVersionState
 import com.adrian.monuver.core.domain.common.ThemeState
 import com.adrian.monuver.core.presentation.navigation.Starting
 import com.adrian.monuver.core.presentation.theme.MonuverTheme
@@ -27,16 +26,13 @@ import com.adrian.monuver.feature.saving.presentation.navigation.savingNavGraph
 import com.adrian.monuver.feature.settings.presentation.navigation.settingsNavGraph
 import com.adrian.monuver.feature.transaction.presentation.navigation.transactionNavGraph
 import com.adrian.monuver.main.MainScreen
-import com.adrian.monuver.onboarding.CheckAppVersionScreen
 import com.adrian.monuver.onboarding.OnboardingScreen
 
 @Composable
 fun App(
     isFirstTime: Boolean = true,
-    checkAppVersionState: CheckAppVersionState = CheckAppVersionState.Success,
     themeState: ThemeState = ThemeState.System,
     isAuthenticated: Boolean = true,
-    onCheckAppVersion: () -> Unit = {},
     onSetFirstTimeToFalse: () -> Unit = {}
 ) {
     MonuverTheme(
@@ -52,8 +48,6 @@ fun App(
             ) {
                 startingNavGraph(
                     navController = rootNavController,
-                    checkAppVersionState = checkAppVersionState,
-                    onStartCheckAppVersion = onCheckAppVersion,
                     onSetFirstTimeToFalse = onSetFirstTimeToFalse
                 )
                 transactionNavGraph(rootNavController)
@@ -76,27 +70,18 @@ fun App(
 
 private fun NavGraphBuilder.startingNavGraph(
     navController: NavHostController,
-    checkAppVersionState: CheckAppVersionState,
-    onStartCheckAppVersion: () -> Unit,
     onSetFirstTimeToFalse: () -> Unit
 ) {
     composable<Starting.Onboarding> {
         OnboardingScreen(
             onFinishOnboarding = {
-                navController.navigate(Starting.CheckAppVersion) {
+                navController.navigate(Starting.Main) {
                     popUpTo(Starting.Onboarding) {
                         inclusive = true
                     }
                 }
+                onSetFirstTimeToFalse()
             }
-        )
-    }
-
-    composable<Starting.CheckAppVersion> {
-        CheckAppVersionScreen(
-            state = checkAppVersionState,
-            onCheck = onStartCheckAppVersion,
-            onSetFirstTimeToFalse = onSetFirstTimeToFalse
         )
     }
 

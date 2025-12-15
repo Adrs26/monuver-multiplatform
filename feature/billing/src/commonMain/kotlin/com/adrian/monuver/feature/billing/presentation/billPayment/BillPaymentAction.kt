@@ -6,5 +6,6 @@ internal sealed interface BillPaymentAction {
     data object NavigateBack : BillPaymentAction
     data object NavigateToCategory : BillPaymentAction
     data object NavigateToSource : BillPaymentAction
+    data class  TitleChange(val title: String) : BillPaymentAction
     data class  PayCurrentBill(val bill: BillPayment) : BillPaymentAction
 }

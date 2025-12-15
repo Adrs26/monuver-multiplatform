@@ -38,6 +38,8 @@ import com.adrian.monuver.core.presentation.navigation.Transaction
 import com.adrian.monuver.core.presentation.util.sharedKoinViewModel
 import com.adrian.monuver.core.presentation.util.toStringRes
 import com.adrian.monuver.feature.transaction.domain.model.Transfer
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import monuver.feature.transaction.generated.resources.Res
 import monuver.feature.transaction.generated.resources.amount
 import monuver.feature.transaction.generated.resources.choose_destination_account
@@ -49,6 +51,8 @@ import monuver.feature.transaction.generated.resources.source_account
 import monuver.feature.transaction.generated.resources.transfer
 import monuver.feature.transaction.generated.resources.transfer_account
 import org.jetbrains.compose.resources.stringResource
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 @Composable
 fun TransferScreen(
@@ -79,12 +83,14 @@ fun TransferScreen(
     )
 }
 
+@OptIn(ExperimentalTime::class)
 @Composable
 internal fun TransferContent(
     state: TransferState,
     onAction: (TransferAction) -> Unit
 ) {
-    val date = rememberTextFieldState(initialText = "")
+    val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+    val date = rememberTextFieldState(initialText = today.toString())
     val formattedAmount = rememberTextFieldState(initialText = "")
 
     var rawAmount by remember { mutableLongStateOf(0) }

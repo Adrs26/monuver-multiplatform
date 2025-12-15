@@ -9,6 +9,7 @@ import com.adrian.monuver.core.data.mapper.toEntity
 import com.adrian.monuver.core.domain.model.Account
 import com.adrian.monuver.core.domain.model.Bill
 import com.adrian.monuver.core.domain.model.Budget
+import com.adrian.monuver.core.domain.model.TransactionCategoryRecommendation
 import com.adrian.monuver.core.domain.repository.CoreRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -46,6 +47,16 @@ class CoreRepositoryImpl(
         return budgetDao.getAllActiveBudgets().map { budgets ->
             budgets.map { it.toDomain() }
         }
+    }
+
+    override fun getCategoryRecommendationByTitle(
+        title: String,
+        type: Int
+    ): Flow<TransactionCategoryRecommendation> {
+        return transactionDao.getCategoryRecommendationByTitle(
+            title = title,
+            type = type
+        ).map { it?.toDomain() ?: TransactionCategoryRecommendation(0, 0) }
     }
 
     override suspend fun createNewBudget(budget: Budget) {

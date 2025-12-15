@@ -1,7 +1,9 @@
 package com.adrian.monuver.core.data.mapper
 
+import com.adrian.monuver.core.data.database.entity.projection.TransactionCategoryRecommendationEntity
 import com.adrian.monuver.core.data.database.entity.room.TransactionEntity
 import com.adrian.monuver.core.domain.model.Transaction
+import com.adrian.monuver.core.domain.model.TransactionCategoryRecommendation
 
 fun TransactionEntity.toDomain() = Transaction(
     id = id,
@@ -63,4 +65,9 @@ fun Transaction.toEntityForUpdate() = TransactionEntity(
     billId = billId,
     isLocked = isLocked,
     isSpecialCase = isSpecialCase
+)
+
+fun TransactionCategoryRecommendationEntity.toDomain() = TransactionCategoryRecommendation(
+    parentCategory = parentCategory,
+    childCategory = childCategory
 )

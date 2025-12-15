@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -36,14 +37,16 @@ import com.adrian.monuver.core.domain.util.isTransactionDateAfterToday
 import com.adrian.monuver.core.presentation.components.ClickTextField
 import com.adrian.monuver.core.presentation.components.CommonAppBar
 import com.adrian.monuver.core.presentation.components.CommonDatePicker
-import com.adrian.monuver.core.presentation.components.CommonTextField
 import com.adrian.monuver.core.presentation.components.NumberTextField
 import com.adrian.monuver.core.presentation.components.PrimaryActionButton
+import com.adrian.monuver.core.presentation.components.ReactiveTextField
 import com.adrian.monuver.core.presentation.navigation.Transaction
 import com.adrian.monuver.core.presentation.util.DatabaseCodeMapper
 import com.adrian.monuver.core.presentation.util.sharedKoinViewModel
 import com.adrian.monuver.core.presentation.util.toStringRes
 import com.adrian.monuver.feature.transaction.domain.model.AddTransaction
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import monuver.feature.transaction.generated.resources.Res
 import monuver.feature.transaction.generated.resources.add
 import monuver.feature.transaction.generated.resources.add_expense
@@ -60,6 +63,8 @@ import monuver.feature.transaction.generated.resources.enter_transaction_title
 import monuver.feature.transaction.generated.resources.source_account
 import monuver.feature.transaction.generated.resources.title
 import org.jetbrains.compose.resources.stringResource
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 @Composable
 internal fun AddTransactionScreen(
@@ -92,6 +97,9 @@ internal fun AddTransactionScreen(
                         ?.savedStateHandle
                         ?.set("budget_category", action.category)
                 }
+                is AddTransactionAction.TitleChange -> {
+                    viewModel.setTransactionTitle(action.title)
+                }
                 is AddTransactionAction.AddNewTransaction -> {
                     viewModel.createTransaction(action.transaction)
                 }
@@ -100,17 +108,18 @@ internal fun AddTransactionScreen(
     )
 }
 
+@OptIn(ExperimentalTime::class)
 @Composable
 internal fun AddTransactionContent(
     type: Int,
     state: AddTransactionState,
     onAction: (AddTransactionAction) -> Unit
 ) {
-    val title = rememberTextFieldState(initialText = "")
-    val date = rememberTextFieldState(initialText = "")
+    val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+    val date = rememberTextFieldState(initialText = today.toString())
     val formattedAmount = rememberTextFieldState(initialText = "")
 
-    var rawAmount by remember { mutableLongStateOf(0) }
+    var rawAmount by rememberSaveable { mutableLongStateOf(0) }
 
     var showDatePickerDialog by remember { mutableStateOf(false) }
     
@@ -150,7 +159,7 @@ internal fun AddTransactionContent(
                     onAction(
                         AddTransactionAction.AddNewTransaction(
                             AddTransaction(
-                                title = title.text.toString(),
+                                title = state.title,
                                 type = type,
                                 parentCategory = state.parentCategory,
                                 childCategory = state.childCategory,
@@ -172,8 +181,11 @@ internal fun AddTransactionContent(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            CommonTextField(
-                state = title,
+            ReactiveTextField(
+                value = state.title,
+                onValueChange = { title ->
+                    onAction(AddTransactionAction.TitleChange(title))
+                },
                 label = stringResource(Res.string.title),
                 placeholder = stringResource(Res.string.enter_transaction_title),
                 errorMessage = stringResource(state.result.toStringRes()),

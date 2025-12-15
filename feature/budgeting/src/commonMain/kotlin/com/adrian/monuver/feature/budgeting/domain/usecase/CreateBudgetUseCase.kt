@@ -3,6 +3,7 @@ package com.adrian.monuver.feature.budgeting.domain.usecase
 import com.adrian.monuver.core.domain.common.DatabaseResultState
 import com.adrian.monuver.core.domain.model.Budget
 import com.adrian.monuver.core.domain.repository.CoreRepository
+import com.adrian.monuver.core.domain.util.Cycle
 import com.adrian.monuver.feature.budgeting.domain.model.AddBudget
 import com.adrian.monuver.feature.budgeting.domain.repository.BudgetRepository
 import kotlinx.datetime.LocalDate
@@ -51,7 +52,7 @@ internal class CreateBudgetUseCase(
             usedAmount = totalAmount,
             isActive = true,
             isOverflowAllowed = budget.isOverflowAllowed,
-            isAutoUpdate = budget.isAutoUpdate
+            isAutoUpdate = if (budget.cycle == Cycle.CUSTOM) false else budget.isAutoUpdate
         )
 
         coreRepository.createNewBudget(budget)

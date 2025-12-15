@@ -8,6 +8,7 @@ import com.adrian.monuver.core.domain.common.CustomDispatcherImpl
 import com.adrian.monuver.core.domain.repository.CoreRepository
 import com.adrian.monuver.core.domain.usecase.GetActiveAccountsUseCase
 import com.adrian.monuver.core.domain.usecase.GetBudgetSummaryUseCase
+import com.adrian.monuver.core.domain.usecase.GetCategoryRecommendationByTitleUseCase
 import com.adrian.monuver.core.domain.usecase.GetDistinctTransactionYearsUseCase
 import com.adrian.monuver.core.domain.usecase.GetUnpaidBillsUseCase
 import org.koin.core.module.dsl.factoryOf
@@ -28,6 +29,7 @@ val coreModule = module {
 
     factoryOf(::GetActiveAccountsUseCase)
     factoryOf(::GetBudgetSummaryUseCase)
+    factoryOf(::GetCategoryRecommendationByTitleUseCase)
     factoryOf(::GetDistinctTransactionYearsUseCase)
     factoryOf(::GetUnpaidBillsUseCase)
 }

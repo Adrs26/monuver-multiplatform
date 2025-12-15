@@ -1,5 +1,6 @@
 package com.adrian.monuver
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.pm.ActivityInfo
 import android.os.Build
@@ -19,7 +20,6 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.adrian.monuver.core.domain.common.CheckAppVersionState
 import com.adrian.monuver.core.domain.common.ThemeState
 import com.adrian.monuver.feature.settings.util.AuthenticationManager
 import io.github.vinceglb.filekit.FileKit
@@ -27,6 +27,7 @@ import io.github.vinceglb.filekit.dialogs.init
 import kotlinx.coroutines.delay
 import org.koin.compose.viewmodel.koinViewModel
 
+@SuppressLint("SourceLockedOrientationActivity")
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -44,7 +45,7 @@ class MainActivity : AppCompatActivity() {
 
             val activity = LocalActivity.current as FragmentActivity
 
-            val viewModel = koinViewModel<MainViewModel>()
+            val viewModel = koinViewModel<AppViewModel>()
             val state by viewModel.state.collectAsStateWithLifecycle()
 
             val useDarkTheme = when (state.themeState) {
@@ -70,10 +71,8 @@ class MainActivity : AppCompatActivity() {
 
             App(
                 isFirstTime = state.isFirstTime,
-                checkAppVersionState = state.checkAppVersionState,
                 themeState = state.themeState,
                 isAuthenticated = state.isAuthenticated,
-                onCheckAppVersion = viewModel::checkAppVersion,
                 onSetFirstTimeToFalse = viewModel::setIsFirstTimeToFalse
             )
         }
@@ -108,11 +107,3 @@ private fun SystemAppearance(isDark: Boolean) {
         }
     }
 }
-
-internal data class MainState(
-    val isFirstTime: Boolean = true,
-    val checkAppVersionState: CheckAppVersionState = CheckAppVersionState.Check,
-    val themeState: ThemeState = ThemeState.System,
-    val isAuthenticationEnabled: Boolean = false,
-    val isAuthenticated: Boolean = false,
-)
