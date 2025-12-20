@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
+import com.adrian.monuver.core.domain.common.DatabaseResultState
 import com.adrian.monuver.core.domain.util.DateHelper
 import com.adrian.monuver.core.domain.util.TransactionType
 import com.adrian.monuver.core.domain.util.isEmptyTransactionAmount
@@ -66,10 +67,12 @@ fun EditTransactionScreen(
         parametersOf(navBackStackEntry.savedStateHandle)
     }
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val result by viewModel.result.collectAsStateWithLifecycle()
 
     state?.let { state ->
         EditTransactionContent(
             state = state,
+            result = result,
             onAction = { action ->
                 when (action) {
                     is EditTransactionAction.NavigateBack -> {
@@ -90,6 +93,7 @@ fun EditTransactionScreen(
 @Composable
 private fun EditTransactionContent(
     state: EditTransactionState,
+    result: DatabaseResultState,
     onAction: (EditTransactionAction) -> Unit
 ) {
     val title = rememberTextFieldState(initialText = state.title)
@@ -100,8 +104,8 @@ private fun EditTransactionContent(
 
     var showDatePickerDialog by remember { mutableStateOf(false) }
 
-    LaunchedEffect(state.result) {
-        if (state.result.isUpdateTransactionSuccess()) {
+    LaunchedEffect(result) {
+        if (result.isUpdateTransactionSuccess()) {
             onAction(EditTransactionAction.NavigateBack)
         }
     }
@@ -153,9 +157,9 @@ private fun EditTransactionContent(
                 state = title,
                 label = stringResource(Res.string.title),
                 placeholder = stringResource(Res.string.enter_transaction_title),
-                errorMessage = stringResource(state.result.toStringRes()),
+                errorMessage = stringResource(result.toStringRes()),
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
-                isError = state.result.isEmptyTransactionTitle()
+                isError = result.isEmptyTransactionTitle()
             )
             ClickTextField(
                 value = stringResource(DatabaseCodeMapper.toChildCategoryTitle(state.childCategory)),
@@ -164,27 +168,27 @@ private fun EditTransactionContent(
                 onClick = {
                     onAction(EditTransactionAction.NavigateToCategory(state.type))
                 },
-                errorMessage = stringResource(state.result.toStringRes()),
+                errorMessage = stringResource(result.toStringRes()),
                 modifier = Modifier.padding(horizontal = 16.dp),
-                isError = state.result.isEmptyTransactionCategory()
+                isError = result.isEmptyTransactionCategory()
             )
             ClickTextField(
                 value = DateHelper.formatToReadable(date.text.toString()),
                 label = stringResource(Res.string.date),
                 placeholder = stringResource(Res.string.choose_transaction_date),
                 onClick = { showDatePickerDialog = true },
-                errorMessage = stringResource(state.result.toStringRes()),
+                errorMessage = stringResource(result.toStringRes()),
                 modifier = Modifier.padding(horizontal = 16.dp),
-                isError = state.result.isEmptyTransactionDate() || state.result.isTransactionDateAfterToday(),
+                isError = result.isEmptyTransactionDate() || result.isTransactionDateAfterToday(),
                 isDatePicker = true
             )
             NumberTextField(
                 state = formattedAmount,
                 label = stringResource(Res.string.amount),
-                errorMessage = stringResource(state.result.toStringRes()),
+                errorMessage = stringResource(result.toStringRes()),
                 onValueAsLongCent = { rawAmount = it },
                 modifier = Modifier.padding(horizontal = 16.dp),
-                isError = state.result.isEmptyTransactionAmount()
+                isError = result.isEmptyTransactionAmount()
             )
             DisableTextField(
                 label = if (state.type == TransactionType.INCOME)
@@ -192,8 +196,8 @@ private fun EditTransactionContent(
                         stringResource(Res.string.source_account),
                 value = state.accountName,
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-                errorMessage = stringResource(state.result.toStringRes()),
-                isError = state.result.isInsufficientAccountBalance()
+                errorMessage = stringResource(result.toStringRes()),
+                isError = result.isInsufficientAccountBalance()
             )
         }
     }

@@ -15,6 +15,7 @@ import com.adrian.monuver.feature.transaction.domain.usecase.UpdateIncomeTransac
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -42,6 +43,9 @@ internal class EditTransactionViewModel(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = null
         )
+
+    private val _result = MutableStateFlow<DatabaseResultState>(DatabaseResultState.Initial)
+    val result = _result.asStateFlow()
 
     private fun getTransactionById(id: Long) {
         getTransactionByIdUseCase(id).onEach { transaction ->
@@ -76,21 +80,13 @@ internal class EditTransactionViewModel(
 
     fun updateTransaction(transaction: EditTransaction) {
         viewModelScope.launch {
-            _state.update {
-                it?.copy(
-                    result = when (transaction.type) {
-                        TransactionType.INCOME -> updateIncomeTransactionUseCase(transaction)
-                        TransactionType.EXPENSE -> updateExpenseTransactionUseCase(transaction)
-                        else -> DatabaseResultState.Initial
-                    }
-                )
+            _result.value = when (transaction.type) {
+                TransactionType.INCOME -> updateIncomeTransactionUseCase(transaction)
+                TransactionType.EXPENSE -> updateExpenseTransactionUseCase(transaction)
+                else -> DatabaseResultState.Initial
             }
             delay(3.seconds)
-            _state.update {
-                it?.copy(
-                    result = DatabaseResultState.Initial
-                )
-            }
+            _result.value = DatabaseResultState.Initial
         }
     }
 }

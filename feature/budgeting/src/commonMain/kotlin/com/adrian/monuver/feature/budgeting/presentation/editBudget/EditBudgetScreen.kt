@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
+import com.adrian.monuver.core.domain.common.DatabaseResultState
 import com.adrian.monuver.core.domain.util.Cycle
 import com.adrian.monuver.core.domain.util.DateHelper
 import com.adrian.monuver.core.domain.util.isBudgetEndDateBeforeToday
@@ -63,10 +64,12 @@ fun EditBudgetScreen(
         parameters = { parametersOf(navBackStackEntry.savedStateHandle) }
     )
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val result by viewModel.result.collectAsStateWithLifecycle()
 
     state?.let { state ->
         EditBudgetContent(
             state = state,
+            result = result,
             onAction = { action ->
                 when (action) {
                     is EditBudgetAction.NavigateBack -> {
@@ -84,6 +87,7 @@ fun EditBudgetScreen(
 @Composable
 internal fun EditBudgetContent(
     state: EditBudgetState,
+    result: DatabaseResultState,
     onAction: (EditBudgetAction) -> Unit,
 ) {
     val formattedAmount = rememberTextFieldState(initialText = state.maxAmount.toFormattedAmount())
@@ -97,8 +101,8 @@ internal fun EditBudgetContent(
 
     var showDatePickerDialog by remember { mutableStateOf(false) }
 
-    LaunchedEffect(state.result) {
-        if (state.result.isUpdateBudgetSuccess()) {
+    LaunchedEffect(result) {
+        if (result.isUpdateBudgetSuccess()) {
             onAction(EditBudgetAction.NavigateBack)
         }
     }
@@ -149,10 +153,10 @@ internal fun EditBudgetContent(
             NumberTextField(
                 state = formattedAmount,
                 label = stringResource(Res.string.maximum_amount),
-                errorMessage = stringResource(state.result.toStringRes()),
+                errorMessage = stringResource(result.toStringRes()),
                 onValueAsLongCent = { rawAmount = it },
                 modifier = Modifier.padding(horizontal = 16.dp),
-                isError = state.result.isEmptyBudgetMaxAmount() || state.result.isCurrentBudgetAmountExceedsMaximumLimit()
+                isError = result.isEmptyBudgetMaxAmount() || result.isCurrentBudgetAmountExceedsMaximumLimit()
             )
             ClickTextField(
                 value = DateHelper.formatToReadable(startDate.text.toString()),
@@ -164,10 +168,10 @@ internal fun EditBudgetContent(
                         activeField = CalendarField.START
                     }
                 },
-                errorMessage = stringResource(state.result.toStringRes()),
+                errorMessage = stringResource(result.toStringRes()),
                 modifier = Modifier.padding(horizontal = 16.dp),
                 isEnabled = state.cycle == Cycle.CUSTOM,
-                isError = state.result.isBudgetStartDateAfterToday(),
+                isError = result.isBudgetStartDateAfterToday(),
                 isDatePicker = true
             )
             ClickTextField(
@@ -180,10 +184,10 @@ internal fun EditBudgetContent(
                         activeField = CalendarField.END
                     }
                 },
-                errorMessage = stringResource(state.result.toStringRes()),
+                errorMessage = stringResource(result.toStringRes()),
                 modifier = Modifier.padding(horizontal = 16.dp),
                 isEnabled = state.cycle == Cycle.CUSTOM,
-                isError = state.result.isBudgetEndDateBeforeToday(),
+                isError = result.isBudgetEndDateBeforeToday(),
                 isDatePicker = true
             )
             CommonCheckBoxField(

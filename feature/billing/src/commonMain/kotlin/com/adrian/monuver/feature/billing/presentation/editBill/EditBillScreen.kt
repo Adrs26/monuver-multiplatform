@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
+import com.adrian.monuver.core.domain.common.DatabaseResultState
 import com.adrian.monuver.core.domain.util.DateHelper
 import com.adrian.monuver.core.domain.util.isEmptyBillAmount
 import com.adrian.monuver.core.domain.util.isEmptyBillDate
@@ -63,10 +64,12 @@ fun EditBillScreen(
         parameters = { parametersOf(navBackStackEntry.savedStateHandle) }
     )
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val result by viewModel.result.collectAsStateWithLifecycle()
 
     state?.let { state ->
         EditBillContent(
             state = state,
+            result = result,
             onAction = { action ->
                 when (action) {
                     is EditBillAction.NavigateBack -> {
@@ -84,6 +87,7 @@ fun EditBillScreen(
 @Composable
 internal fun EditBillContent(
     state: EditBillState,
+    result: DatabaseResultState,
     onAction: (EditBillAction) -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -99,15 +103,15 @@ internal fun EditBillContent(
 
     var showDatePickerDialog by remember { mutableStateOf(false) }
 
-    LaunchedEffect(state.result) {
+    LaunchedEffect(result) {
         when {
-            state.result.isUpdateBillSuccess() -> {
+            result.isUpdateBillSuccess() -> {
                 onAction(EditBillAction.NavigateBack)
             }
-            state.result.isEmptyBillFixPeriod() -> {
+            result.isEmptyBillFixPeriod() -> {
                 snackbarHostState.showSnackbar("Periode pembayaran tidak boleh kosong")
             }
-            state.result.isInvalidBillFixPeriod() -> {
+            result.isInvalidBillFixPeriod() -> {
                 snackbarHostState.showSnackbar("Periode pembayaran tidak valid")
             }
         }
@@ -162,27 +166,27 @@ internal fun EditBillContent(
                 state = title,
                 label = stringResource(Res.string.title),
                 placeholder = stringResource(Res.string.enter_bill_title),
-                errorMessage = stringResource(state.result.toStringRes()),
+                errorMessage = stringResource(result.toStringRes()),
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
-                isError = state.result.isEmptyBillTitle()
+                isError = result.isEmptyBillTitle()
             )
             ClickTextField(
                 value = DateHelper.formatToReadable(date.text.toString()),
                 label = stringResource(Res.string.due_date),
                 placeholder = stringResource(Res.string.choose_due_date),
                 onClick = { showDatePickerDialog = true },
-                errorMessage = stringResource(state.result.toStringRes()),
+                errorMessage = stringResource(result.toStringRes()),
                 modifier = Modifier.padding(horizontal = 16.dp),
-                isError = state.result.isEmptyBillDate(),
+                isError = result.isEmptyBillDate(),
                 isDatePicker = true
             )
             NumberTextField(
                 state = formattedAmount,
                 label = stringResource(Res.string.amount),
-                errorMessage = stringResource(state.result.toStringRes()),
+                errorMessage = stringResource(result.toStringRes()),
                 onValueAsLongCent = { rawAmount = it },
                 modifier = Modifier.padding(horizontal = 16.dp),
-                isError = state.result.isEmptyBillAmount()
+                isError = result.isEmptyBillAmount()
             )
             if (state.isRecurring && !state.isPaidBefore) {
                 BillPeriodRadioField(

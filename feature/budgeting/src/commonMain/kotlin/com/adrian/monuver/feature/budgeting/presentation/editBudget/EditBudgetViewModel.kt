@@ -13,12 +13,12 @@ import com.adrian.monuver.feature.budgeting.domain.usecase.UpdateBudgetUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
@@ -40,6 +40,9 @@ internal class EditBudgetViewModel(
             initialValue = null
         )
 
+    private val _result = MutableStateFlow<DatabaseResultState>(DatabaseResultState.Initial)
+    val result = _result.asStateFlow()
+
     private fun getBudgetById(id: Long) {
         getBudgetByIdUseCase(id).onEach { budget ->
             budget?.let { budget ->
@@ -59,17 +62,9 @@ internal class EditBudgetViewModel(
 
     fun updateBudget(budget: EditBudget) {
         viewModelScope.launch {
-            _state.update {
-                it?.copy(
-                    result = updateBudgetUseCase(budget)
-                )
-            }
+            _result.value = updateBudgetUseCase(budget)
             delay(3.seconds)
-            _state.update {
-                it?.copy(
-                    result = DatabaseResultState.Initial
-                )
-            }
+            _result.value = DatabaseResultState.Initial
         }
     }
 }

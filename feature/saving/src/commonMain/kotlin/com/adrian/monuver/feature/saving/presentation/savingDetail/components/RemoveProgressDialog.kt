@@ -3,9 +3,7 @@ package com.adrian.monuver.feature.saving.presentation.savingDetail.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -50,12 +48,11 @@ internal fun RemoveProgressDialog(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 RemoveProgressAnimation(
-                    modifier = Modifier.size(250.dp)
+                    modifier = Modifier.size(300.dp)
                 )
-                Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = stringResource(Res.string.data_delete_in_progress),
-                    modifier = Modifier.padding(24.dp),
+                    modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.bodyMedium
                 )

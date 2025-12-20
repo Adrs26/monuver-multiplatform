@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
+import com.adrian.monuver.core.domain.common.DatabaseResultState
 import com.adrian.monuver.core.domain.util.DateHelper
 import com.adrian.monuver.core.domain.util.isEmptySavingTargetAmount
 import com.adrian.monuver.core.domain.util.isEmptySavingTargetDate
@@ -57,10 +58,12 @@ fun EditSavingScreen(
         parameters = { parametersOf(navBackStackEntry.savedStateHandle) }
     )
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val result by viewModel.result.collectAsStateWithLifecycle()
 
     state?.let { state ->
         EditSavingContent(
             state = state,
+            result = result,
             onAction = { action ->
                 when (action) {
                     is EditSavingAction.NavigateBack -> {
@@ -78,6 +81,7 @@ fun EditSavingScreen(
 @Composable
 private fun EditSavingContent(
     state: EditSavingState,
+    result: DatabaseResultState,
     onAction: (EditSavingAction) -> Unit
 ) {
     val title = rememberTextFieldState(initialText = state.title)
@@ -88,8 +92,8 @@ private fun EditSavingContent(
 
     var showDatePickerDialog by remember { mutableStateOf(false) }
 
-    LaunchedEffect(state.result) {
-        if (state.result.isUpdateSavingSuccess()) {
+    LaunchedEffect(result) {
+        if (result.isUpdateSavingSuccess()) {
             onAction(EditSavingAction.NavigateBack)
         }
     }
@@ -133,27 +137,27 @@ private fun EditSavingContent(
                 state = title,
                 label = stringResource(Res.string.title),
                 placeholder = stringResource(Res.string.enter_save_title),
-                errorMessage = stringResource(state.result.toStringRes()),
+                errorMessage = stringResource(result.toStringRes()),
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
-                isError = state.result.isEmptySavingTitle()
+                isError = result.isEmptySavingTitle()
             )
             ClickTextField(
                 value = DateHelper.formatToReadable(date.text.toString()),
                 label = stringResource(Res.string.target_date),
                 placeholder = stringResource(Res.string.choose_transaction_date),
                 onClick = { showDatePickerDialog = true },
-                errorMessage = stringResource(state.result.toStringRes()),
+                errorMessage = stringResource(result.toStringRes()),
                 modifier = Modifier.padding(horizontal = 16.dp),
-                isError = state.result.isEmptySavingTargetDate() || state.result.isSavingTargetDateBeforeToday(),
+                isError = result.isEmptySavingTargetDate() || result.isSavingTargetDateBeforeToday(),
                 isDatePicker = true
             )
             NumberTextField(
                 state = formattedAmount,
                 label = stringResource(Res.string.target_amount),
-                errorMessage = stringResource(state.result.toStringRes()),
+                errorMessage = stringResource(result.toStringRes()),
                 onValueAsLongCent = { rawAmount = it },
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-                isError = state.result.isEmptySavingTargetAmount()
+                isError = result.isEmptySavingTargetAmount()
             )
         }
     }

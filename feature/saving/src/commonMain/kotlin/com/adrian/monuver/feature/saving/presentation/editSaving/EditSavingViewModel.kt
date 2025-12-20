@@ -13,12 +13,12 @@ import com.adrian.monuver.feature.saving.domain.usecase.UpdateSavingUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
@@ -40,6 +40,9 @@ internal class EditSavingViewModel(
             initialValue = null
         )
 
+    private val _result = MutableStateFlow<DatabaseResultState>(DatabaseResultState.Initial)
+    val result = _result.asStateFlow()
+
     private fun getSavingById(id: Long) {
         getSavingByIdUseCase(id).onEach { saving ->
             saving?.let { saving ->
@@ -57,17 +60,9 @@ internal class EditSavingViewModel(
 
     fun updateSaving(saving: EditSaving) {
         viewModelScope.launch {
-            _state.update {
-                it?.copy(
-                    result = updateSavingUseCase(saving)
-                )
-            }
+            _result.value = updateSavingUseCase(saving)
             delay(3.seconds)
-            _state.update {
-                it?.copy(
-                    result = DatabaseResultState.Initial
-                )
-            }
+            _result.value = DatabaseResultState.Initial
         }
     }
 }

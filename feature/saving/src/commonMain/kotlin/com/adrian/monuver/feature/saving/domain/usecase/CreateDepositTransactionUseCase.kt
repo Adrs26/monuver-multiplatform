@@ -56,10 +56,12 @@ internal class CreateDepositTransactionUseCase(
             isSpecialCase = true
         )
 
-        savingRepository.createDepositTransaction(
-            savingId = deposit.savingId,
-            transaction = transaction
-        )
+        repeat(100) {
+            savingRepository.createDepositTransaction(
+                savingId = deposit.savingId,
+                transaction = transaction
+            )
+        }
         return DatabaseResultState.CreateDepositTransactionSuccess
     }
 }

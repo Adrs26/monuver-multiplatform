@@ -1,7 +1,5 @@
 package com.adrian.monuver.feature.billing.presentation.editBill
 
-import com.adrian.monuver.core.domain.common.DatabaseResultState
-
 internal data class EditBillState(
     val id: Long = 0,
     val parentId: Long = 0,
@@ -14,6 +12,5 @@ internal data class EditBillState(
     val period: Int = 0,
     val fixPeriod: String = "",
     val nowPaidPeriod: Int = 0,
-    val isPaidBefore: Boolean = false,
-    val result: DatabaseResultState = DatabaseResultState.Initial
+    val isPaidBefore: Boolean = false
 )
